@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { usePatientStore } from "../store"
 import type { DraftPatient } from "../types"
@@ -5,12 +6,31 @@ import type { DraftPatient } from "../types"
 export default function PatientForm() {
 
     const addPatient = usePatientStore(state => state.addPatient)
+    const activeId = usePatientStore(state => state.activeId)
+    const patients = usePatientStore(state => state.patients)
+    const updatePatient = usePatientStore(state => state.updatePatient)
 
-    const { register, handleSubmit, formState: {errors} } = useForm<DraftPatient>() 
-  
+    const { register, handleSubmit, setValue , formState: {errors}, reset } = useForm<DraftPatient>() 
+
+    useEffect(()=>{
+      if(activeId){
+        const activePatient = patients.filter( patient => patient.id === activeId )[0]
+        setValue("name", activePatient.name)
+        setValue("caretaker", activePatient.caretaker)
+        setValue("email", activePatient.email)
+        setValue("date", activePatient.date)
+        setValue("symptoms", activePatient.symptoms)
+      }
+    },[activeId])
 
     const registerPatient = (data: DraftPatient) => {
-        addPatient(data)
+      if(activeId){
+          updatePatient(data)
+      }else{
+          addPatient(data)
+      }
+        
+        reset()
     }
 
   return (
@@ -108,7 +128,7 @@ export default function PatientForm() {
             <input
                 type="submit"
                 className={errors.name || errors.caretaker || errors.email || errors.date || errors.symptoms ? `bg-pink-600 placeholder-gray-500 text-white border border-pink-600 border-l-8 rounded-lg p-3 w-full opacity-10 ` : `bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors`} 
-                value='Guardar Paciente'
+                value={activeId ? 'Actualizar Paciente' : 'Guardar Paciente'}
             />
         </form> 
     </div>
