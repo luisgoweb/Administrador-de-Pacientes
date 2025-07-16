@@ -3,7 +3,7 @@
 const PatientsList = () => {
   return (
     <div>
-      
+      Listado
     </div>
   )
 }
