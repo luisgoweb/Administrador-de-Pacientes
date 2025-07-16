@@ -1,7 +1,15 @@
-
+import { useForm } from "react-hook-form"
+import type { DraftPatient } from "../types"
 
 export default function PatientForm() {
+
+    const { register, handleSubmit, formState: {errors} } = useForm<DraftPatient>()
   
+
+    const registerPatient = (data: DraftPatient) => {
+      console.log(data)
+    }
+
   return (
     <div className="md:w-1/2 lg:w-2/5 mx-5">
         <h2 className="font-black text-3xl text-center">Seguimiento Pacientes</h2>
@@ -14,6 +22,7 @@ export default function PatientForm() {
         <form 
             className="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
             noValidate
+            onSubmit={handleSubmit(registerPatient)}
         >
               <div className="mb-5">
                   <label htmlFor="name" className="text-sm uppercase font-bold">
@@ -21,10 +30,14 @@ export default function PatientForm() {
                   </label>
                   <input  
                       id="name"
-                      className="w-full p-3  border border-gray-100"  
+                      className={errors.name ? ` placeholder-gray-500 text-gray-900 border border-pink-600 border-l-8 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent` : `w-full p-3  border border-gray-100`}  
                       type="text" 
                       placeholder="Nombre del Paciente" 
+                      {...register('name', {
+                        required: true
+                      })}
                   />
+                  
               </div>
 
               <div className="mb-5">
@@ -33,9 +46,12 @@ export default function PatientForm() {
                 </label>
                 <input  
                     id="caretaker"
-                    className="w-full p-3  border border-gray-100"  
+                    className={errors.caretaker ? ` placeholder-gray-500 text-gray-900 border border-pink-600 border-l-8 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent` : `w-full p-3  border border-gray-100`}   
                     type="text" 
-                    placeholder="Nombre del Propietario" 
+                    placeholder="Nombre del Propietario"
+                    {...register('caretaker', {
+                      required: true
+                    })} 
                 />
               </div>
 
@@ -45,9 +61,16 @@ export default function PatientForm() {
               </label>
               <input  
                   id="email"
-                  className="w-full p-3  border border-gray-100"  
+                  className={errors.email ? ` placeholder-gray-500 text-gray-900 border border-pink-600 border-l-8 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent` : `w-full p-3  border border-gray-100`}   
                   type="email" 
                   placeholder="Email de Registro" 
+                  {...register("email", {
+                    required: true,
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'Email No Válido'
+                    }
+                  })}  
               />
             </div>
 
@@ -57,8 +80,11 @@ export default function PatientForm() {
                 </label>
                 <input  
                     id="date"
-                    className="w-full p-3  border border-gray-100"  
+                    className={errors.date ? ` placeholder-gray-500 text-gray-900 border border-pink-600 border-l-8 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent` : `w-full p-3  border border-gray-100`}   
                     type="date" 
+                    {...register('date', {
+                      required: true
+                    })} 
                 />
             </div>
             
@@ -68,14 +94,17 @@ export default function PatientForm() {
                 </label>
                 <textarea  
                     id="symptoms"
-                    className="w-full p-3  border border-gray-100"  
+                    className={errors.symptoms ? ` placeholder-gray-500 text-gray-900 border border-pink-600 border-l-8 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent` : `w-full p-3  border border-gray-100`}   
                     placeholder="Síntomas del paciente" 
+                    {...register('symptoms', {
+                      required: true
+                    })} 
                 ></textarea>
             </div>
 
             <input
                 type="submit"
-                className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
+                className={errors.name || errors.caretaker || errors.email || errors.date || errors.symptoms ? `bg-pink-600 placeholder-gray-500 text-white border border-pink-600 border-l-8 rounded-lg p-3 w-full opacity-10 ` : `bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors`} 
                 value='Guardar Paciente'
             />
         </form> 
