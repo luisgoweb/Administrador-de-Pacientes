@@ -6,7 +6,7 @@ Desarrollada con React, TypeScript y Tailwind CSS, esta aplicación es un claro 
 
 🚀 ¡Explora el Proyecto!
 
-👉 Administrador de Pacientes en Netlify/Vercel 👈
+👉 https://administrador-de-pacientes-ppmlo8dvt.vercel.app/ 👈
 
 ✨ Características Principales y Habilidades Demostradas
 
